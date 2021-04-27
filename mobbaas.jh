@@ -1,0 +1,46 @@
+application {
+  config {
+    prodDatabaseType postgresql
+  }
+}
+
+entity Application {
+	id UUID required unique
+    name String required
+}
+
+entity Page {
+	id UUID required unique
+    name String required
+    title String
+    index Boolean 
+    description String
+}
+entity Section {
+	id UUID required unique
+	name String required
+    title String
+}
+
+entity Widget {
+	id UUID required unique
+	name String required
+    identifier String
+}
+entity PageLayout {
+	idPage UUID
+	idSection UUID
+    order Integer
+}
+entity SectionLayout {
+	idSection UUID
+	idWidget UUID
+}
+relationship OneToMany {
+	Application{pages} to Page{application}
+	Page to PageLayout{page}
+    Section to PageLayout{section}
+    Widget to SectionLayout{widget}
+    Section to SectionLayout{section}
+}
+
