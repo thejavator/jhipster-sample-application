@@ -1,8 +1,8 @@
 {
-  "name": "jhipster-sample-application",
+  "name": "my-app",
   "version": "0.0.1-SNAPSHOT",
   "private": true,
-  "description": "Description for jhipsterSampleApplication",
+  "description": "Description for myApp",
   "license": "UNLICENSED",
   "scripts": {
     "prettier:check": "prettier --check \"{,src/**/,webpack/}*.{md,json,yml,html,js,ts,tsx,css,scss,java}\"",
@@ -60,7 +60,7 @@
     "ci:frontend:test": "npm run webapp:build:$npm_package_config_default_environment && npm run test-ci"
   },
   "config": {
-    "backend_port": 8080,
+    "backend_port": "8080",
     "default_environment": "prod",
     "packaging": "jar"
   },
