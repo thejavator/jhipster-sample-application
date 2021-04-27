@@ -3,6 +3,7 @@ import axios from 'axios';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 export const ACTION_TYPES = {
+  FETCH_GATEWAY_ROUTE: 'administration/FETCH_GATEWAY_ROUTE',
   FETCH_LOGS: 'administration/FETCH_LOGS',
   FETCH_LOGS_CHANGE_LEVEL: 'administration/FETCH_LOGS_CHANGE_LEVEL',
   FETCH_HEALTH: 'administration/FETCH_HEALTH',
@@ -15,6 +16,9 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   errorMessage: null,
+  gateway: {
+    routes: [],
+  },
   logs: {
     loggers: [] as any[],
   },
@@ -34,6 +38,7 @@ export type AdministrationState = Readonly<typeof initialState>;
 
 export default (state: AdministrationState = initialState, action): AdministrationState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
     case REQUEST(ACTION_TYPES.FETCH_METRICS):
     case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):
     case REQUEST(ACTION_TYPES.FETCH_LOGS):
@@ -45,6 +50,7 @@ export default (state: AdministrationState = initialState, action): Administrati
         errorMessage: null,
         loading: true,
       };
+    case FAILURE(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
     case FAILURE(ACTION_TYPES.FETCH_METRICS):
     case FAILURE(ACTION_TYPES.FETCH_THREAD_DUMP):
     case FAILURE(ACTION_TYPES.FETCH_LOGS):
@@ -55,6 +61,14 @@ export default (state: AdministrationState = initialState, action): Administrati
         ...state,
         loading: false,
         errorMessage: action.payload,
+      };
+    case SUCCESS(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
+      return {
+        ...state,
+        loading: false,
+        gateway: {
+          routes: action.payload.data,
+        },
       };
     case SUCCESS(ACTION_TYPES.FETCH_METRICS):
       return {
@@ -106,6 +120,10 @@ export default (state: AdministrationState = initialState, action): Administrati
 };
 
 // Actions
+export const gatewayRoutes = () => ({
+  type: ACTION_TYPES.FETCH_GATEWAY_ROUTE,
+  payload: axios.get('api/gateway/routes'),
+});
 
 export const systemHealth = () => ({
   type: ACTION_TYPES.FETCH_HEALTH,
